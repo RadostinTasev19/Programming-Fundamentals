@@ -1,0 +1,91 @@
+function pirates(input) {
+    let obj = {}
+    for (const line of input) {
+        if (line === "Sail") {
+            break;
+        }
+        let [city, population, gold] = line.split("||").map((el) => isNaN(el) ? el : Number(el))
+
+        if (obj.hasOwnProperty(city)) {
+            let currentPopulation = obj[city].population
+            let currentGold = obj[city].gold
+            obj[city].population = currentPopulation + population
+            obj[city].gold = currentGold + gold
+        } else {
+            obj[city] = {
+                population: population,
+                gold: gold
+            }
+        }
+    }
+    let index = input.indexOf("Sail")
+    index++
+    let command = input[index]
+    while (command !== "End") {
+        let [action, town, ...args] = command.split("=>")
+        switch (action) {
+            case "Plunder":
+                town;
+                let [people, gold] = args.map(Number)
+                debugger
+                if (obj.hasOwnProperty(town)) {
+                 
+                    obj[town].population -= people
+                    obj[town].gold -= gold
+                    console.log(`${town} plundered! ${gold} gold stolen, ${people} citizens killed.`)
+
+                    if (obj[town].population <= 0 || obj[town].gold <= 0) {
+                        delete obj[town]
+                        console.log(`${town} has been wiped off the map!`)
+                    }
+                }
+                break;
+            case "Prosper":
+                town;
+                let addGold = Number(args[0])
+                if (addGold < 0) {
+                    console.log(`Gold added cannot be a negative number!`)
+                    break;
+                } else {
+                    if (obj.hasOwnProperty(town)) {
+                        obj[town].gold += addGold
+                        console.log(`${addGold} gold added to the city treasury. ${town} now has ${obj[town].gold} gold.`)
+                    }
+                }
+
+                break;
+
+
+        }
+        index++
+        command = input[index]
+    }
+    debugger
+    if (obj) {
+        let settlementsCount = Object.keys(obj).length
+
+        console.log(`Ahoy, Captain! There are ${settlementsCount} wealthy settlements to go to:`)
+        let entries = Object.entries(obj)
+
+        for (const settlement of entries) {
+            console.log(`${settlement[0]} -> Population: ${settlement[1].population} citizens, Gold: ${settlement[1].gold} kg`)
+        }
+
+    }else{
+        console.log(`Ahoy, Captain! All targets have been plundered and destroyed!`)
+    }
+}
+pirates(
+    (["Nassau||95000||1000",
+"San Juan||930000||1250",
+"Campeche||270000||690",
+"Port Royal||320000||1000",
+"Port Royal||100000||2000",
+"Sail",
+"Prosper=>Port Royal=>-200",
+"Plunder=>Nassau=>94000=>750",
+"Plunder=>Nassau=>1000=>150",
+"Plunder=>Campeche=>150000=>690",
+"End"])
+
+)
