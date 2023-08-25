@@ -6,7 +6,7 @@ function adAstra(input) {
     let totalCalories = 0;
     let arr = []
     while (match) {
-        debugger
+
         let calories = Number(match.groups.calories)
         totalCalories += calories
 
