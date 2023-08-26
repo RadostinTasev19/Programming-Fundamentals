@@ -1,0 +1,88 @@
+function needForSpeed(input) {
+    let numCars = input.shift()
+
+    let map = new Map()
+    for (const line of input) {
+        if (line === "Stop") {
+            break;
+        }
+        if (line.includes("|")) {
+            let [car, mileage, fuel] = line.split("|").map((el) => isNaN(el) ? el : Number(el))
+            map.set(car, [])
+            map.get(car).push(mileage)
+            map.get(car).push(fuel)
+
+        } if (line.includes(":")) {
+
+            let [command, car, ...args] = line.split(" : ").map((el) => isNaN(el) ? el : Number(el))
+            switch (command) {
+                case "Drive":
+
+                    car;
+                    let [distance, fuel] = args.map(Number)
+                    let currentFuel = map.get(car)[1]
+                    if (currentFuel < fuel) {
+                        console.log(`Not enough fuel to make that ride`)
+                        break;
+                    }
+                    map.get(car)[0] += distance
+                    map.get(car)[1] -= fuel
+                    console.log(`${car} driven for ${distance} kilometers. ${fuel} liters of fuel consumed.`)
+
+                    if (map.get(car)[0] >= 100000) {
+                        map.delete(car)
+                        console.log(`Time to sell the ${car}!`)
+                    }
+                    break;
+
+                case "Refuel":
+                    car;
+                    debugger
+                    let givenFuel = Number(args[0])
+                    let totalFuel = givenFuel + map.get(car)[1]
+                    if (totalFuel > 75) {
+                        map.get(car)[1] = 75
+                        totalFuel -= 75
+                        console.log(`${car} refueled with ${givenFuel - totalFuel} liters`)
+                    } else {
+                        map.get(car)[1] = totalFuel
+                        console.log(`${car} refueled with ${givenFuel} liters`)
+                    }
+
+                    break;
+                case "Revert":
+
+                    car;
+                    let km = Number(args[0])
+                    map.get(car)[0] = map.get(car)[0] - km
+
+                    if (map.get(car)[0] < 10000) {
+                        map.get(car)[0] = 10000
+                    } else {
+                        console.log(`${car} mileage decreased by ${km} kilometers`)
+                    }
+                    break;
+            }
+        }
+    }
+    let entries = Array.from(map)
+    for (const el of entries) {
+        console.log(`${el[0]} -> Mileage: ${el[1][0]} kms, Fuel in the tank: ${el[1][1]} lt.`)
+    }
+}
+needForSpeed(
+    [
+        '4',
+        'Lamborghini Veneno|11111|74',
+        'Bugatti Veyron|12345|67',
+        'Koenigsegg CCXR|67890|12',
+        'Aston Martin Valkryie|99900|50',
+        'Drive : Koenigsegg CCXR : 382 : 82',
+        'Drive : Aston Martin Valkryie : 99 : 23',
+        'Drive : Aston Martin Valkryie : 2 : 1',
+        'Refuel : Lamborghini Veneno : 40',
+        'Revert : Bugatti Veyron : 2000',
+        'Stop'
+    ]
+
+)
