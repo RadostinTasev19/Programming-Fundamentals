@@ -1,0 +1,25 @@
+function destinationMapper(input) {
+
+    let pattern = /(^[=]|[\/])[A-Za-z]{2,}\1/g
+    let text = input
+    let travelPoints = 0
+    let destinations = []
+    let foundDestinations = text.match(pattern)
+    if (foundDestinations) {
+        foundDestinations.forEach((el) => {
+            if (el[0] === el[el.length - 1]) {
+
+                el = el.substring(1, el.length - 1)
+                destinations.push(el)
+                travelPoints += el.length
+            }
+
+        })
+    }
+    console.log(`Destinations: ${destinations.join(", ")}`)
+    console.log(`Travel Points: ${travelPoints}`)
+
+}
+destinationMapper(
+    ("ThisIs some InvalidInput")
+)
