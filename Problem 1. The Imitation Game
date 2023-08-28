@@ -1,0 +1,53 @@
+    function theImitationGame(input) {
+
+        let message = input.shift()
+        debugger
+        // we create an object which will hold each command from the input as key,
+        // and a function as value, which will be executed upon the concealed message
+        let commandParser = {
+
+            "Move": (message, letterCount) => {
+                while (letterCount > 0) {
+                    let firstLetter = message[0]
+                    let restLetters = message.slice(1, message.length)
+                    message = restLetters + firstLetter
+                    letterCount--
+                }
+                return message
+            },
+            "Insert": (message, index, value) => {
+                return message.slice(0, index) + value + message.slice(index, message.length)
+            },
+            "ChangeAll": (message, substring, replacement) => {
+                while (message.includes(substring)) {
+                    message = message.replace(substring, replacement)
+                }
+                return message
+            }
+        }
+        // we loop through each line of the input
+        input.forEach(line => {
+            if (line !== "Decode") {
+                // we declare variables for each command, and corresponding values
+                let [command, ...args] = line.split("|")
+
+                // the message will equal the result of each key value (function) which we invoke with parameters (message,...args)
+                message = commandParser[command](message, ...args)
+
+
+            }
+        });
+        console.log(`The decrypted message is: ${message}`)
+
+    }
+    theImitationGame(
+        [
+            'owyouh',
+            'Move|2',
+            'Move|3',
+            'Insert|3|are',
+            'Insert|9|?',
+            'Decode'
+        ]
+
+    )
