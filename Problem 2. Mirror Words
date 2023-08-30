@@ -1,0 +1,62 @@
+function mirrorWords(input) {
+    debugger
+    let text = input[0]
+    let pattern = /([@#])[A-Za-z]{3,}(\1)(\1)[A-Za-z]{3,}(\1)/g
+    let array = []
+    let match = text.match(pattern)
+    let result = []
+
+
+    if (match !== null) {
+        for (const line of match) {
+            if (line.includes("#")) {
+
+                let words = line.replace(RegExp("#", "g"), "")
+                let first = words.slice(0, words.length / 2)
+                let second = words.slice(words.length / 2, words.length)
+                let reversed = second.split("").reverse().join("")
+                if (first === reversed && first.length === reversed.length) {
+
+                    let obj = {
+                        first: first,
+                        second: second
+                    }
+                    array.push(obj)
+
+                }
+            } else if (line.includes("@")) {
+                let words = line.replace(RegExp("@", "g"), "")
+                let first = words.slice(0, words.length / 2)
+                let second = words.slice(words.length / 2, words.length)
+                let reversed = second.split("").reverse().join("")
+                if (first === reversed && first.length === reversed.length) {
+                    let obj = {
+                        first: first,
+                        second: second
+                    }
+                    array.push(obj)
+
+                }
+            }
+        }
+        let validPairs = match.length
+        console.log(`${validPairs} word pairs found!`)
+    } else {
+        console.log(`No word pairs found!`)
+    }
+    if (array.length === 0) {
+        console.log(`No mirror words!`)
+    } else {
+        for (const line of array) {
+            let entries = Object.entries(line)
+            result.push(`${entries[0][1]} <=> ${entries[1][1]}`)
+        }
+        console.log(`The mirror words are:`)
+        console.log(result.join(", "))
+    }
+
+}
+mirrorWords(
+    ['#lol#lol# @#God@@doG@# #abC@@Cba# @Xyu@#uyX#']
+
+)
