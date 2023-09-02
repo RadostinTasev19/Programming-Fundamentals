@@ -1,0 +1,110 @@
+function heroesOfCodeNLogic(input) {
+
+    let heroesCount = Number(input.shift())
+    let obj = {}
+    for (let index = 0; index < heroesCount; index++) {
+        let [hero, hp, mp] = input[index].split(" ").map((el) => isNaN(el) ? el : Number(el))
+        obj[hero] = {
+            "hit points": hp,
+            "mana points": mp
+        }
+    }
+    debugger
+    for (let index = heroesCount; index < input.length; index++) {
+        if (input[index] === "End") {
+            break;
+        }
+        let [action, name, ...tokens] = input[index].split(" - ")
+        switch (action) {
+            case "CastSpell":
+
+                let mpDemand = Number(tokens[0])
+                let spellName = tokens[1]
+
+                if (obj.hasOwnProperty(name)) {
+                    if (obj[name]["mana points"] >= mpDemand) {
+                        obj[name]["mana points"] -= mpDemand
+                        console.log(`${name} has successfully cast ${spellName} and now has ${obj[name]["mana points"]} MP!`)
+                    } else {
+                        console.log(`${name} does not have enough MP to cast ${spellName}!`)
+                    }
+                }
+
+                break;
+
+            case "TakeDamage":
+                // reduce the hero HP by the given amount
+
+                let damage = Number(tokens[0])
+                let attacker = tokens[1]
+                if (obj.hasOwnProperty(name)) {
+                    obj[name]["hit points"] -= damage
+                    if (obj[name]["hit points"] > 0) {
+                        console.log(`${name} was hit for ${damage} HP by ${attacker} and now has ${obj[name]["hit points"]} HP left!`)
+                    } else {
+                        delete obj[name]
+                        console.log(`${name} has been killed by ${attacker}!`)
+                    }
+
+                }
+                break;
+            case "Recharge":
+
+                let amount = Number(tokens[0])
+                if (obj.hasOwnProperty(name)) {
+                    let current = obj[name]["mana points"]
+                    obj[name]["mana points"] += amount
+                    if (obj[name]["mana points"] > 200) {
+                        obj[name]["mana points"] = 200
+                        amount = 200 - current
+
+                    }
+                    console.log(`${name} recharged for ${amount} MP!`)
+
+                }
+                break;
+            case "Heal":
+
+                let quantity = Number(tokens[0])
+                if (obj.hasOwnProperty(name)) {
+                    let current = obj[name]["hit points"]
+                    obj[name]["hit points"] += quantity
+                    if (obj[name]["hit points"] > 100) {
+
+                        obj[name]["hit points"] = 100
+                        quantity = 100 - current
+                    }
+                }
+                console.log(`${name} healed for ${quantity} HP!`)
+
+                break;
+
+        }
+
+
+    }
+
+    let entries = Object.entries(obj)
+    entries.forEach((line) => {
+        console.log(`${line[0]}\n  HP: ${line[1]["hit points"]}\n  MP: ${line[1]["mana points"]}`)
+    })
+}
+
+heroesOfCodeNLogic(
+    [
+        "4",
+        "Adela 90 150",
+        "SirMullich 70 40",
+        "Ivor 1 111",
+        "Tyris 94 61",
+        "Heal - SirMullich - 50",
+        "Recharge - Adela - 100",
+        "CastSpell - Tyris - 1000 - Fireball",
+        "TakeDamage - Tyris - 99 - Fireball",
+        "TakeDamage - Ivor - 3 - Mosquito",
+        "End"
+    ]
+
+
+
+)
