@@ -1,0 +1,92 @@
+function heroesOfCodeAndLogic(input) {
+
+    let heroesCount = Number(input.shift())
+    let obj = {}
+
+    for (let index = 0; index < heroesCount; index++) {
+        let [hero, hp, mp] = input[index].split(" ").map((el) => isNaN(el) ? el : Number(el))
+        if (!obj.hasOwnProperty(hero)) {
+            obj[hero] = {
+                "hit points": hp,
+                "mana points": mp
+            }
+        }
+    }
+
+    let commandparser = {
+        "CastSpell": (hero, mp, spellName) => {
+            if (obj[hero]) {
+                if (obj[hero]["mana points"] >= mp) {
+                    obj[hero]["mana points"] -= mp
+                    console.log(`${hero} has successfully cast ${spellName} and now has ${obj[hero]["mana points"]} MP!`)
+                } else {
+                    console.log(`${hero} does not have enough MP to cast ${spellName}!`)
+                }
+                return obj
+            }
+        },
+        "TakeDamage": (hero, damage, attacker) => {
+            if (obj[hero]) {
+                obj[hero]["hit points"] -= damage
+                if (obj[hero]["hit points"] > 0) {
+                    console.log(`${hero} was hit for ${damage} HP by ${attacker} and now has ${obj[hero]["hit points"]} HP left!`)
+                } else {
+                    delete obj[hero]
+                    console.log(`${hero} has been killed by ${attacker}!`)
+                }
+                return obj
+            }
+        },
+        "Recharge": (hero, amount) => {
+            if (obj[hero]) {
+                let current = obj[hero]["mana points"]
+                obj[hero]["mana points"] += amount
+                if (obj[hero]["mana points"] > 200) {
+                    obj[hero]["mana points"] = 200
+                    amount = 200 - current
+                }
+                console.log(`${hero} recharged for ${amount} MP!`)
+                return obj
+            }
+        },
+        "Heal": (hero, amount) => {
+            if (obj[hero]) {
+                let current = obj[hero]["hit points"]
+                obj[hero]["hit points"] += amount
+                if (obj[hero]["hit points"] > 100) {
+                    obj[hero]["hit points"] = 100
+                    amount = 100 - current
+                }
+                console.log(`${hero} healed for ${amount} HP!`)
+                return obj
+            }
+        }
+    }
+    for (let index = heroesCount; index < input.length; index++) {
+
+
+        let [command, hero, ...tokens] = input[index].split(" - ").map((el) => isNaN(el) ? el : Number(el))
+        if (command === "End") {
+            debugger
+            break;
+        }
+        obj = commandparser[command](hero, ...tokens)
+    }
+    let entries = Object.entries(obj)
+    entries.forEach((line) => {
+        console.log(`${line[0]}\n  HP: ${line[1]["hit points"]}\n  MP: ${line[1]["mana points"]}`)
+    });
+}
+heroesOfCodeAndLogic(
+    [
+        "2",
+        "Solmyr 85 120",
+        "Kyrre 99 50",
+        "Heal - Solmyr - 10",
+        "Recharge - Solmyr - 50",
+        "TakeDamage - Kyrre - 66 - Orc",
+        "CastSpell - Kyrre - 15 - ViewEarth",
+        "End"
+    ]
+
+)
