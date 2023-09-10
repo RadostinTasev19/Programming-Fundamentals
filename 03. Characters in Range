@@ -1,0 +1,19 @@
+function charactersInRange(char1, char2) {
+    //prints all characters  between  the given according to  their ASCII code
+    // first we evaluate the start character, which will be the smaller between both characters
+    let start = Math.min(char1.charCodeAt(), char2.charCodeAt())
+    // then we evaluate the end char which will be the bigger between both characters
+    let end = Math.max(char1.charCodeAt(), char2.charCodeAt())
+    let result = ""
+    for (let i = start + 1; i < end; i++) {
+        
+        //convert i to character and save it in a variable
+        result += `${String.fromCharCode(i)} `
+
+    }
+    console.log(result)
+}
+charactersInRange(
+    'C',
+    '#'
+)
