@@ -1,0 +1,26 @@
+function oddEven(num) {
+    debugger
+    let numStr = num.toString()
+    function odd(num) {
+        let result = 0
+        for (let index = 0; index < numStr.length; index++) {
+            if (numStr[index] % 2 !== 0) {
+                result += Number(numStr[index])
+            }
+        }
+        return result
+    }
+    let oddSum = odd(num)
+    function even(num) {
+        let result = 0
+        for (let index = 0; index < numStr.length; index++) {
+            if (numStr[index] % 2 === 0) {
+                result += Number(numStr[index])
+            }
+        }
+        return result
+    }
+    let evenSum = even(num)
+    console.log(`Odd sum = ${oddSum}, Even sum = ${evenSum}`)
+}
+oddEven(3495892137259234)
