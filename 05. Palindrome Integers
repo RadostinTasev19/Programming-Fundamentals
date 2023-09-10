@@ -1,0 +1,24 @@
+function palindromeIntegers(arr) {
+
+    function isPalindrome(arr) {
+        
+        let result = arr.forEach((el) => {
+            el = el.toString()
+            let reversed = el.split("").reverse().join("")
+            //[1,2,3]
+            //[3,2,1]
+            //[321]
+            if (el === reversed) {
+                console.log("true")
+            } else {
+                console.log("false")
+
+            }
+        })
+    }
+    let output = isPalindrome(arr)
+
+}
+palindromeIntegers(
+    [32, 2, 232, 1010]
+)
