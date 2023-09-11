@@ -1,0 +1,25 @@
+function carWash2(arr) {
+
+    let value = 0;
+    let soap = x => x + 10
+    let water = x => x + x * 0.2
+    let vaccum = x => x + x * 0.25
+    let mud = x => x - x * 0.1
+
+    for (let index = 0; index < arr.length; index++) {
+
+        if (arr[index] === 'soap') {
+            // we invoke the function soap by passing parameter value
+            value = soap(value)
+        } else if (arr[index] === 'water') {
+            value = water(value)
+        } else if (arr[index] === 'vacuum cleaner') {
+            value = vaccum(value)
+        } else if (arr[index] === 'mud') {
+            value = mud(value)
+        }
+
+    }
+    return `The car is ${value.toFixed(2)}% clean`
+}
+console.log(carWash2(["soap", "water", "mud", "mud", "water", "mud", "vacuum cleaner"]))
